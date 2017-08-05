@@ -1,0 +1,24 @@
+{
+    "name": "linkorb/collection",
+    "description": "Super powered collections",
+    "homepage": "https://github.com/linkorb/collection",
+    "keywords": ["collection", "linkorb", "array", "data structure", "php-ds"],
+    "type": "application",
+    "authors": [
+        {
+            "name": "LinkORB",
+            "email": "engineering@linkorb.com",
+            "role": "Development"
+        }
+    ],
+    "require": {
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Collection\\": "src/"
+        }
+    },
+    "license": "MIT"
+}
