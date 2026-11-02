@@ -49,12 +49,12 @@ class TypedArray implements CollectionInterface
         return $this->offsetExists($item->identifier());
     }
 
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->items);
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         if (!is_a($value, $this->className)) {
             throw new CollectionException("Item is not of class " . $this->className);
@@ -74,17 +74,17 @@ class TypedArray implements CollectionInterface
         }
    }
 
-    public function offsetExists($offset)
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->items[$offset]);
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset(mixed $offset): void
     {
        unset($this->items[$offset]);
     }
 
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
         if (!$this->offsetExists($offset)) {
             throw new CollectionException('Unknow offset: ' . $offset);
@@ -92,17 +92,32 @@ class TypedArray implements CollectionInterface
         return $this->items[$offset];
     }
 
+    public function __serialize(): array
+    {
+        return [
+            'className' => $this->className,
+            'items' => $this->items,
+        ];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->className = $data['className'] ?? null;
+        $this->items = $data['items'] ?? [];
+    }
+
     public function serialize()
     {
-        return serialize($this->data);
+        return serialize($this->__serialize());
     }
 
     public function unserialize($data)
     {
-        $this->data = unserialize($data);
+        $payload = unserialize($data);
+        $this->__unserialize(is_array($payload) ? $payload : []);
     }
 
-    public function count()
+    public function count(): int
     {
         return count($this->items);
     }
